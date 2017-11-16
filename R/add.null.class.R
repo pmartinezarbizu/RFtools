@@ -7,7 +7,7 @@
 #'
 #'@param predictors The columns containig the predictor variables.
 #'
-#'@param nMC Number returned observations of the null class (default = 50) 
+#'@param nMC Number Returned observations of the null class (default = 50) 
 #' 
 #'
 #'
