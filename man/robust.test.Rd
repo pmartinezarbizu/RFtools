@@ -16,7 +16,7 @@ robust.test(target, predictors, nMC = 999, q = 0.05)
 \item{q}{Number, quantile to use for the post-hoc test, default 0.05}
 }
 \value{
-An object of class MVSF. Dataframe with results of multivariate test and flexibility test.
+An object of class RBT. List with results of RF robustness test.
 \item{assignment}{Table with the class assigments per model} 
 \item{false.pos}{Table with the false positives, after post-hoc test, per model} 
 \item{false.pos.rate}{Table with the false positive rate, after post-hoc test, per model}
@@ -31,14 +31,12 @@ Models are calculated leaving one class out. Observations of the class that is e
 are used to predict with the trained model. It is evident that these observations cannot belong to any of the target classes.
 After prediction, the post-hoc test for false positive discovery is applied to the results. A residual false positive rate is calculated.
 Row lables display the class that was excluded from the model. Column names display the predicted class.
-
-A plot method is available
 }
 \examples{
 data(iris)
 rbt.iris <- robust.test(iris$Species,iris[,1:4])
 print(rbt.iris)
-plot(rbt.iris)
+
 }
 \seealso{
 \code{\link{add.null.class}} \code{\link{smooth.data}}

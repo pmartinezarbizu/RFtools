@@ -4,17 +4,18 @@
 \alias{MVSF.test}
 \title{Multivariate Structure and Flexibility Test}
 \usage{
-MVSF.test(target, predictors, nMC = 99)
+MVSF.test(target, predictors, nMC = 999)
 }
 \arguments{
 \item{target}{Vector or target Column with names of classes.}
 
 \item{predictors}{Dataframe or matrix with predictor variables.}
 
-\item{nMC}{Number of smoothed observations returned per class (default = 99)}
+\item{nMC}{Number of smoothed observations returned per class (default = 999)}
 }
 \value{
-An object of class MVSF. Dataframe with results of multivariate test and flexibility test.
+An object of class MVSF.
+ Dataframe with results of multivariate test and flexibility test.
 \item{oob.err}{OOB of trained model} 
 \item{null.err}{mean OOB of null model} 
 \item{P.null}{Pseudo P value, probability that trained OOB can happen by random} 
@@ -31,7 +32,7 @@ and the flexibility of your model to correctly classify new observations created
 Multivariate Test:
 The observed OOB is compared against an empirical null model with no multivariate structure.
 The null model is created by shuffling the lables of the classes nMC times
-and keeping the OOB of each class under the null model. a Pseudo P-value is returned as P = r/nMC-1,
+and keeping the OOB of each class under the null model. A Pseudo P-value is returned as P = r/nMC-1,
 with r = the number of times that the null model OOB >= trained OOB, and nMC = number of Monte Carlo simulations.
 
 Flexibility test:
@@ -43,7 +44,7 @@ A plot method is available
 }
 \examples{
 data(iris)
-MVSF.iris <- MVSF.test(iris$Species,iris[,1:4])
+MVSF.iris <- MVSF.test(iris$Species,iris[,1:4],nMC=99)
 print(MVSF.iris)
 plot(MVSF.iris)
 }

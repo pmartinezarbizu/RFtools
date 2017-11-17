@@ -2,16 +2,16 @@
 % Please edit documentation in R/smooth.data.R
 \name{smooth.data}
 \alias{smooth.data}
-\title{smooth classes}
+\title{Smooth Classes}
 \usage{
-smooth.data(target, predictors, nMC = 999)
+smooth.data(target, predictors, nMC = 100)
 }
 \arguments{
 \item{target}{Vector or target Column with names of classes.}
 
 \item{predictors}{Dataframe or matrix with predictor variables.}
 
-\item{nMC}{Number of smoothed observations returned per class (default = 99)}
+\item{nMC}{Number of smoothed observations returned per class (default = 100)}
 }
 \value{
 Dataframe with nMC smoothed observations.
@@ -22,8 +22,7 @@ Create a new dataset with smoothed classes and nMC observations per class.
 }
 \details{
 For each class, the function will shuffle the rows of each predictor separately
-and extract one row for each class. This is repeated nMC times.
-By doing so we generate nMC in silico observations for each class,
+and extract nMC rows for each class. By doing so we generate nMC in silico observations for each class,
 but mantaining the range (observed variability) for each predictor.
 }
 \examples{

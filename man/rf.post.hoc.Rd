@@ -9,19 +9,19 @@ rf.post.hoc(rf, newdata)
 \arguments{
 \item{rf}{Object of class randomForest.}
 
-\item{dataset}{Dataframe to predict using RF model.}
+\item{newdata}{Dataframe to predict using RF model.}
 }
 \value{
-An object of class RF.ph List with results of Post-hoc test .
+An object of class RF.ph List with results of Post-Hoc test .
 \itemize{
 \item{ecdf}{ The empirical cumulative distribution fuction of the beta distributed
- RF probability of assignment to correct class. } 
-\item{post.hoc}{ Dataframe with results of post-hoc test. } 
+ RF probability of assignment to correct class. }
+\item{post.hoc}{ Dataframe with results of post-hoc test. }
  \itemize{
-     \item{winner}{ Dataframe with results of post-hoc test. } 
-     \item{p.assign}{ Dataframe with results of post-hoc test. } 
-     \item{p.post.hoc}{ Dataframe with results of post-hoc test. } 
-     \item{sig}{ Significance code:  0 ***, 0.001 **, 0.01 *, 0.05 ., > ns  } 
+     \item{winner}{ Dataframe with results of post-hoc test. }
+     \item{p.assign}{ Dataframe with results of post-hoc test. }
+     \item{p.post.hoc}{ Dataframe with results of post-hoc test. }
+     \item{sig}{ Significance code:  0 ***, 0.001 **, 0.01 *, 0.05 ., > ns  }
  }
 }
 }
@@ -30,15 +30,15 @@ Test for false positives in RF prediction.
 }
 \details{
 RF Post-Hoc test:
-Take an object created with randomForest and a new dataset to predict. 
-From the votes matrix of RF object take only correct assigments and calculate for each class
+Take an object created with randomForest and a new dataset to predict.
+From the votes matrix of RF object take only correct assigments and calculate for each predicted class
 the beta distribution of the probability of assignment (POA) to the correct class using fitdistr() from MASS.
 In case fitdistr fails in estimating the parameters of beta,
 the non-parametric empirical cumulative distribution function (ecdf) is used instead.
-The for each observation in newdata, the probability that the POA to winner class (p.assign) belongs to 
+The for each observation in newdata, the probability that the POA to winner class (p.assign) belongs to
 the beta (or ecdf) of that class in the training data set is calculated (p.post.hoc).
-Use p.post.hoc to reject the hypothesis that the predicted POA belongs to the trained POA. 
-A much low p.post.hoc (e.g. <= 0.05) indicates a possible missclassification to that class.
+Use p.post.hoc to reject the hypothesis that the predicted POA belongs to the trained POA.
+A low p.post.hoc probability (e.g. <= 0.05) indicates a possible missclassification of that observation.
 
 Methods plot, print and summary are available
 }

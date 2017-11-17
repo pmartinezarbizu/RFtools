@@ -9,9 +9,9 @@
 \arguments{
 \item{x}{Object created by MVSF.test()}
 
-\item{pnull}{significance level for the multivariate structure test}
+\item{pnull}{Significance level for the multivariate structure test}
 
-\item{psmooth}{significance level for the flexibility test}
+\item{psmooth}{Significance level for the flexibility test}
 }
 \description{
 Plot results of Multivariate Structure and Flexibility Test.

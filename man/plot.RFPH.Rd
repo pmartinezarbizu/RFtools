@@ -4,10 +4,10 @@
 \alias{plot.RFPH}
 \title{Plot Post-hoc test}
 \usage{
-\method{plot}{RFPH}(obj, Species = "all", q = 0.05)
+\method{plot}{RFPH}(x, Species = "all", q = 0.05)
 }
 \arguments{
-\item{obj}{Object of class RFPH.}
+\item{x}{Object of class RFPH.}
 
 \item{Species}{Name of class to be plotted or 'all' for all classes}
 
@@ -21,13 +21,13 @@ Plots the results of rf.post.hoc.
 }
 \details{
 If name of class to be plotted is specify, the plot returns
-the density function of the probability of assignment to the correct class 
-in the trainig data and the POA of the predicted data as circles.
+the density function of the probability of assignment 'POA' to the correct class
+in the trainig data and the POA of the predicted data as circles symbols.
 Circle is filled 'red' if not significantly different at q level, otherwise 'white'.
 The POA at significance level q is plotted as dashed grey line.
 
-If Species = 'all' (default), then all classes are plotted. Instead of density function for trained POA, the median (grey symbol) 
-and the range between quantiles between q and 1-q are plotted.
+If Species = 'all' (default), then all classes are plotted. Instead of density function for trained POA, the median (grey symbol)
+and the range between quantiles q and 1-q are plotted.
 }
 \examples{
 data(iris)
@@ -41,6 +41,20 @@ posth <- rf.post.hoc(rf,irSe)
 
 plot(posth)
 plot(posth,'versicolor',0.001)
+
+#example with maldi data
+data(maldi)
+library(randomForest)
+unique(maldi$species)
+maldi_train <- maldi[maldi$species != 'Tachidius discipes',]
+maldi_test <- maldi[maldi$species == 'Tachidius discipes',]
+#exclude Tachidius discipes from factors
+maldi_train$species <- factor(maldi_train$species)
+rf <- randomForest(species ~ ., data = maldi_train[-1])
+test <- rf.post.hoc(rf,maldi_test)
+plot(test)
+plot(test,'Cletodes limicola')
+
 }
 \seealso{
 \code{\link{rf.post.hoc}}
