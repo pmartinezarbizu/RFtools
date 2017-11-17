@@ -7,11 +7,12 @@
 #'
 #'@param predictors Dataframe or matrix with predictor variables.
 #'
-#'@param nMC Number of smoothed observations returned per class (default = 99) 
+#'@param nMC Number of smoothed observations returned per class (default = 999) 
 #' 
 #'
 #'
-#'@return An object of class MVSF. Dataframe with results of multivariate test and flexibility test.
+#'@return An object of class MVSF.
+#'  Dataframe with results of multivariate test and flexibility test.
 #' \item{oob.err}{OOB of trained model} 
 #' \item{null.err}{mean OOB of null model} 
 #' \item{P.null}{Pseudo P value, probability that trained OOB can happen by random} 
@@ -25,7 +26,7 @@
 #' Multivariate Test:
 #' The observed OOB is compared against an empirical null model with no multivariate structure.
 #' The null model is created by shuffling the lables of the classes nMC times
-#' and keeping the OOB of each class under the null model. a Pseudo P-value is returned as P = r/nMC-1,
+#' and keeping the OOB of each class under the null model. A Pseudo P-value is returned as P = r/nMC-1,
 #' with r = the number of times that the null model OOB >= trained OOB, and nMC = number of Monte Carlo simulations.
 #' 
 #' Flexibility test:
@@ -39,11 +40,11 @@
 #'
 #'@examples
 #' data(iris)
-#' MVSF.iris <- MVSF.test(iris$Species,iris[,1:4])
+#' MVSF.iris <- MVSF.test(iris$Species,iris[,1:4],nMC=99)
 #' print(MVSF.iris)
 #' plot(MVSF.iris)
 #'@export MVSF.test
-#'@import foreach doParallel parallel randomForest
+#'@import foreach doParallel parallel randomForest stats
 # 
 #'@seealso \code{\link{plot.MVSF}} \code{\link{robust.test}}
 
@@ -51,7 +52,7 @@
 
 
 ############################################ 
-MVSF.test <- function(target, predictors, nMC = 99) {
+MVSF.test <- function(target, predictors, nMC = 999) {
     
     # how many corers to be used in parallel?
     doParallel::registerDoParallel(parallel::detectCores())
