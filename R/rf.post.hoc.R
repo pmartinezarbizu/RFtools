@@ -4,33 +4,33 @@
 #'
 #'@param rf Object of class randomForest.
 #'
-#'@param dataset Dataframe to predict using RF model.
+#'@param newdata Dataframe to predict using RF model.
 #'
-#'@return An object of class RF.ph List with results of Post-hoc test .
+#'@return An object of class RF.ph List with results of Post-Hoc test .
 #'\itemize{
 #' \item{ecdf}{ The empirical cumulative distribution fuction of the beta distributed
-#'  RF probability of assignment to correct class. } 
-#' \item{post.hoc}{ Dataframe with results of post-hoc test. } 
+#'  RF probability of assignment to correct class. }
+#' \item{post.hoc}{ Dataframe with results of post-hoc test. }
 #'  \itemize{
-#'      \item{winner}{ Dataframe with results of post-hoc test. } 
-#'      \item{p.assign}{ Dataframe with results of post-hoc test. } 
-#'      \item{p.post.hoc}{ Dataframe with results of post-hoc test. } 
-#'      \item{sig}{ Significance code:  0 ***, 0.001 **, 0.01 *, 0.05 ., > ns  } 
+#'      \item{winner}{ Dataframe with results of post-hoc test. }
+#'      \item{p.assign}{ Dataframe with results of post-hoc test. }
+#'      \item{p.post.hoc}{ Dataframe with results of post-hoc test. }
+#'      \item{sig}{ Significance code:  0 ***, 0.001 **, 0.01 *, 0.05 ., > ns  }
 #'  }
-#' } 
+#' }
 #'
 #'
 #'@details
 #' RF Post-Hoc test:
-#' Take an object created with randomForest and a new dataset to predict. 
-#' From the votes matrix of RF object take only correct assigments and calculate for each class
+#' Take an object created with randomForest and a new dataset to predict.
+#' From the votes matrix of RF object take only correct assigments and calculate for each predicted class
 #' the beta distribution of the probability of assignment (POA) to the correct class using fitdistr() from MASS.
 #' In case fitdistr fails in estimating the parameters of beta,
 #' the non-parametric empirical cumulative distribution function (ecdf) is used instead.
-#' The for each observation in newdata, the probability that the POA to winner class (p.assign) belongs to 
+#' The for each observation in newdata, the probability that the POA to winner class (p.assign) belongs to
 #' the beta (or ecdf) of that class in the training data set is calculated (p.post.hoc).
-#' Use p.post.hoc to reject the hypothesis that the predicted POA belongs to the trained POA. 
-#' A much low p.post.hoc (e.g. <= 0.05) indicates a possible missclassification to that class.
+#' Use p.post.hoc to reject the hypothesis that the predicted POA belongs to the trained POA.
+#' A low p.post.hoc probability (e.g. <= 0.05) indicates a possible missclassification of that observation.
 #'
 #' Methods plot, print and summary are available
 #'
@@ -48,28 +48,41 @@
 #' posth <- rf.post.hoc(rf,irSe)
 #' summary(posth)
 #'@export rf.post.hoc summary.RFPH
-#'@import randomForest MASS
+#'@import randomForest MASS stats
 #'@seealso \code{\link{add.null.class}} \code{\link{smooth.data}} \code{\link{robust.test}}
 
 
 ######################################################### Post hoc test of RF prediction using probability of class assignment
 rf.post.hoc <- function(rf, newdata) {
-    
+
     # initial checks
     if (class(rf)[1] != "randomForest.formula") {
         stop("rf should be a randomForest Object\n ")
     }
-    
-    # consider only correct rf assigment list of correct names
-    sp.correct.train <- rf$y[rf$y == rf$predicted]
-    # corresponding votes
-    votes.train <- rf$votes[which(rf$y == rf$predicted), ]
-    
+    # predict with rf model
+    res.pred <- data.frame(class = predict(rf, newdata), predict(rf, newdata, type = "p"))
+
+    # probability of assignment
+    prob.assign <- apply(res.pred[-1], max, MARGIN = 1)
+
+    # consider only predicted classes
+    pred.class.votes <- data.frame(
+        rf.pred = rf$y[which(rf$y %in% unique(res.pred$class))],
+        votes.pred = rf$votes[which(rf$y %in% unique(res.pred$class)),]
+    )
+    colnames(pred.class.votes) <- c('class',colnames(rf$votes))
+
+    # winner class consider correctly predicted
+    winner <- colnames(pred.class.votes[,-1])[apply(pred.class.votes[,-1],1,which.max)]
+
+    #consider only corrently predicted
+    pred.class <- pred.class.votes[pred.class.votes$class == winner,]
+
     # for each species calculate the empirical beta distribution
-    res.ecdf <- vector("list", length(rf$classes))
-    for (i2 in 1:length(rf$classes)) {
+    res.ecdf <- vector("list", length(unique(pred.class.votes$class)))
+    for (i2 in unique(pred.class.votes$class)) {
         # list of probabilities of correct assigment for class i
-        prob.ca <- votes.train[sp.correct.train == rf$classes[i2], i2]
+        prob.ca <- pred.class.votes[pred.class.votes == i2, i2]
         # first calculate lower 5% quantile from ecdf
         ed <- ecdf(prob.ca)
         # delete beta values
@@ -77,7 +90,7 @@ rf.post.hoc <- function(rf, newdata) {
         beta2 = NULL
         # try optimization of empirical beta distribution of the probability of correct
         # assigment
-        try(beta1 <- fitdistr(prob.ca, "beta", start = list(shape1 = 1, shape2 = 1)), 
+        try(beta1 <- MASS::fitdistr(prob.ca, "beta", start = list(shape1 = 1, shape2 = 1)),
             silent = TRUE)
         # now try to generate 5000 random numbers with the parameters of fitdistr
         try(beta2 <- rbeta(5000, beta1$estimate[1], beta1$estimate[2]), silent = TRUE)
@@ -85,51 +98,45 @@ rf.post.hoc <- function(rf, newdata) {
         # try to calculate the lower 5% quantile
         res.ecdf[[i2]] <- list(rf$classes[i2], ed)
     }
-    
-    
-    # predict with rf model
-    res.pred <- data.frame(class = predict(rf, newdata), predict(rf, newdata, type = "p"))
-    
-    # probabiloity of assignment
-    prob.assign <- apply(res.pred[-1], max, MARGIN = 1)
-    
+
+
+
     # probability that probability of assigment belongs to OOB POA for winner class
     p.post.hoc <- c()
     for (i in 1:nrow(res.pred)) {
-        n_spec <- which(rf$classes == res.pred$class[i])
-        df <- res.ecdf[[n_spec]][[2]]
+        df <- res.ecdf[[as.character(res.pred$class[i])]][[2]]
         p.post.hoc <- c(p.post.hoc, df(prob.assign[i]))
     }
-    
-    
-    
+
+
+
     # significance symbols
     sig = c(rep("ns", length(p.post.hoc)))
     sig[p.post.hoc <= 0.05] <- "."
     sig[p.post.hoc <= 0.01] <- "*"
     sig[p.post.hoc <= 0.001] <- "**"
     sig[p.post.hoc <= 1e-04] <- "***"
-    
-    
-    res <- list(ecdf = res.ecdf, post.hoc = data.frame(winner = res.pred$class, p.assign = prob.assign, 
+
+
+    res <- list(ecdf = res.ecdf, post.hoc = data.frame(winner = res.pred$class, p.assign = prob.assign,
         p.post.hoc = round(p.post.hoc, 4), sig = sig))
     class(res) <- c("RFPH", "list")
     return(res)
-    
+
 }
 ## end of function
 
 
 ### Method summary
-summary.RFPH = function(obj) {
+summary.RFPH = function(object, ...) {
     cat("Results of RF post-hoc test:\n")
     cat("\n")
-    print(obj$post.hoc)
+    print(object$post.hoc, ...)
     cat("Signif. codes: ns > 0.05, . <= 0.05, * <=0.01, ** <=0.001, *** <=0.0001\n")
     cat("\n")
     cat("\n")
     cat("Table of counts by class:\n")
-    print(table(obj$post.hoc[, c(1, 4)]))
+    print(table(object$post.hoc[, c(1, 4)]), ...)
 }
 ## end of method summary
 

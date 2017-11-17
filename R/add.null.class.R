@@ -7,7 +7,7 @@
 #'
 #'@param predictors The columns containig the predictor variables.
 #'
-#'@param nMC Number Returned observations of the null class (default = 50) 
+#'@param nMC Number returned observations of the null class (default = 50) 
 #' 
 #'
 #'
@@ -19,7 +19,7 @@
 #' A null class has no multivariate structure. It is created by shuffling the 
 #' rows across the whole dataset and then shuffling the column labels.
 #' By doing so we generate nMC in silico observations for a class containing
-#' only random variable values.
+#' only random variable values but preserving the variable space.
 #' 
 #'@author Pedro Martinez Arbizu & Sven Rossel
 #'

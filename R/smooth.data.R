@@ -1,4 +1,4 @@
-#'@title smooth classes
+#'@title Smooth Classes
 #'
 #'@description Create a new dataset with smoothed classes and nMC observations per class.
 #' 
@@ -7,7 +7,7 @@
 #'
 #'@param predictors Dataframe or matrix with predictor variables.
 #'
-#'@param nMC Number of smoothed observations returned per class (default = 99) 
+#'@param nMC Number of smoothed observations returned per class (default = 100) 
 #' 
 #'
 #'@return Dataframe with nMC smoothed observations.
@@ -16,8 +16,7 @@
 #'
 #'@details
 #' For each class, the function will shuffle the rows of each predictor separately
-#' and extract one row for each class. This is repeated nMC times.
-#' By doing so we generate nMC in silico observations for each class,
+#' and extract nMC rows for each class. By doing so we generate nMC in silico observations for each class,
 #' but mantaining the range (observed variability) for each predictor.
 #' 
 #'@author Pedro Martinez Arbizu & Sven Rossel
@@ -32,7 +31,7 @@
 
 
 
-smooth.data <- function(target, predictors, nMC = 999) {
+smooth.data <- function(target, predictors, nMC = 100) {
     
     # number of times to multiply
     n <- min(table(target))

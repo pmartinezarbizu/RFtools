@@ -11,7 +11,7 @@
 #' 
 #'@param q Number, quantile to use for the post-hoc test, default 0.05
 #'
-#'@return An object of class MVSF. Dataframe with results of multivariate test and flexibility test.
+#'@return An object of class RBT. List with results of RF robustness test.
 #' \item{assignment}{Table with the class assigments per model} 
 #' \item{false.pos}{Table with the false positives, after post-hoc test, per model} 
 #' \item{false.pos.rate}{Table with the false positive rate, after post-hoc test, per model} 
@@ -24,7 +24,6 @@
 #' After prediction, the post-hoc test for false positive discovery is applied to the results. A residual false positive rate is calculated.
 #' Row lables display the class that was excluded from the model. Column names display the predicted class.
 #'
-#' A plot method is available
 #'
 #'@author Pedro Martinez Arbizu
 #'
@@ -32,9 +31,9 @@
 #' data(iris)
 #' rbt.iris <- robust.test(iris$Species,iris[,1:4])
 #' print(rbt.iris)
-#' plot(rbt.iris)
+#' 
 #'@export robust.test
-#'@import randomForest MASS
+#'@import randomForest MASS stats
 #'@seealso \code{\link{add.null.class}} \code{\link{smooth.data}}
 
 
@@ -70,7 +69,7 @@ robust.test <- function(target, predictors, nMC = 999, q = 0.05) {
         
         
         # predict with rf model
-        res.test5 <- data.frame(class = predict(rf, dattest2), predict(rf, dattest2, 
+        res.test <- data.frame(class = predict(rf, dattest2), predict(rf, dattest2, 
             type = "p"))
         
         # consider only correct rf assigment list of correct names
@@ -102,14 +101,14 @@ robust.test <- function(target, predictors, nMC = 999, q = 0.05) {
         }
         
         
-        # extract from res.test3 the assigment for each species and calculate false
+        # extract from res.test the assigment for each species and calculate false
         # positives 'fa' total assigments
         ta <- c()
         # assigments with probability greater than q5 = false positives 'fa'
         fa <- c()
         
         for (i3 in 1:length(levels(dattrain$class))) {
-            op <- res.test5[which(res.test5$class == levels(dattrain$class)[i3]), 
+            op <- res.test[which(res.test$class == levels(dattrain$class)[i3]), 
                 i3 + 1]
             ta <- c(ta, length(op))
             fa <- c(fa, length(op[op > q5[i3]]))
@@ -134,9 +133,9 @@ robust.test <- function(target, predictors, nMC = 999, q = 0.05) {
     
     # add error columns
     tot.assign <- cbind(tot.assign, assign.error = apply(tot.assign[, which(colnames(tot.assign) != 
-        "null")], sum, MARGIN = 1, na.rm = T)/nMC)
+        "null")], sum, MARGIN = 1, na.rm = TRUE)/nMC)
     false.pos <- cbind(false.pos, res.error = apply(false.pos[, which(colnames(false.pos) != 
-        "null")], sum, MARGIN = 1, na.rm = T)/nMC)
+        "null")], sum, MARGIN = 1, na.rm = TRUE)/nMC)
     
     rob.res <- list(assignment = data.frame(tot.assign), false.pos = data.frame(false.pos), 
         false.pos.rate = data.frame(false.pos.rate), nMC = nMC)
