@@ -12,9 +12,9 @@
 #'  RF probability of assignment to correct class. }
 #' \item{post.hoc}{ Dataframe with results of post-hoc test. }
 #'  \itemize{
-#'      \item{winner}{ Dataframe with results of post-hoc test. }
-#'      \item{p.assign}{ Dataframe with results of post-hoc test. }
-#'      \item{p.post.hoc}{ Dataframe with results of post-hoc test. }
+#'      \item{winner}{ The predicted class. }
+#'      \item{POA}{ Probability of assigment to the winner class. }
+#'      \item{p.post.hoc}{ Probability that POA belongs to POA distribution of this class in the trained model. }
 #'      \item{sig}{ Significance code:  0 ***, 0.001 **, 0.01 *, 0.05 ., > ns  }
 #'  }
 #' }
@@ -118,7 +118,7 @@ rf.post.hoc <- function(rf, newdata) {
     sig[p.post.hoc <= 1e-04] <- "***"
 
 
-    res <- list(ecdf = res.ecdf, post.hoc = data.frame(winner = res.pred$class, p.assign = prob.assign,
+    res <- list(ecdf = res.ecdf, post.hoc = data.frame(winner = res.pred$class, POA = prob.assign,
         p.post.hoc = round(p.post.hoc, 4), sig = sig))
     class(res) <- c("RFPH", "list")
     return(res)
