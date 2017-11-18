@@ -43,19 +43,21 @@ A low p.post.hoc probability (e.g. <= 0.05) indicates a possible missclassificat
 Methods plot, print and summary are available
 }
 \examples{
-data(iris)
+#example with maldi data
+data(maldi)
 library(randomForest)
-irSe <- iris[iris$Species == 'setosa',]
-ir <- iris[iris$Species != 'setosa',]
-ir$Species <- factor(ir$Species)
-irNc <- add.null.class(ir$Species,ir[,1:4])
-rf <- randomForest(class ~ ., data = irNc)
-table(predict(rf,irSe))
-posth <- rf.post.hoc(rf,irSe)
-summary(posth)
+unique(maldi$species)
+maldi_train <- maldi[maldi$species != 'Cletodes limicola',]
+maldi_test <- maldi[maldi$species == 'Cletodes limicola',]
+#exclude Cletodes limicola from factors
+maldi_train$species <- factor(maldi_train$species)
+rf <- randomForest(species ~ ., data = maldi_train[-1])
+ph <- rf.post.hoc(rf,maldi_test)
+plot(ph)
+plot(ph,'Tachidius discipes')
 }
 \seealso{
-\code{\link{add.null.class}} \code{\link{smooth.data}} \code{\link{robust.test}}
+\code{\link{add.null.class}} \code{\link{smooth.data}} \code{\link{robust.test}} \code{\link{plot.RFPH}}
 }
 \author{
 Pedro Martinez Arbizu & Sven Rossel

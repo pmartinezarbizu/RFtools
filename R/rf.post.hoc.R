@@ -37,19 +37,21 @@
 #'@author Pedro Martinez Arbizu & Sven Rossel
 #'
 #'@examples
-#' data(iris)
+#'#example with maldi data
+#' data(maldi)
 #' library(randomForest)
-#' irSe <- iris[iris$Species == 'setosa',]
-#' ir <- iris[iris$Species != 'setosa',]
-#' ir$Species <- factor(ir$Species)
-#' irNc <- add.null.class(ir$Species,ir[,1:4])
-#' rf <- randomForest(class ~ ., data = irNc)
-#' table(predict(rf,irSe))
-#' posth <- rf.post.hoc(rf,irSe)
-#' summary(posth)
+#' unique(maldi$species)
+#' maldi_train <- maldi[maldi$species != 'Cletodes limicola',]
+#' maldi_test <- maldi[maldi$species == 'Cletodes limicola',]
+#'#exclude Cletodes limicola from factors
+#' maldi_train$species <- factor(maldi_train$species)
+#' rf <- randomForest(species ~ ., data = maldi_train[-1])
+#' ph <- rf.post.hoc(rf,maldi_test)
+#' plot(ph)
+#' plot(ph,'Tachidius discipes')
 #'@export rf.post.hoc summary.RFPH
 #'@import randomForest MASS stats
-#'@seealso \code{\link{add.null.class}} \code{\link{smooth.data}} \code{\link{robust.test}}
+#'@seealso \code{\link{add.null.class}} \code{\link{smooth.data}} \code{\link{robust.test}} \code{\link{plot.RFPH}}
 
 
 ######################################################### Post hoc test of RF prediction using probability of class assignment
@@ -90,12 +92,12 @@ rf.post.hoc <- function(rf, newdata) {
         beta2 = NULL
         # try optimization of empirical beta distribution of the probability of correct
         # assigment
-        try(beta1 <- MASS::fitdistr(prob.ca, "beta", start = list(shape1 = 1, shape2 = 1)),
+        try(beta1 <- MASS::fitdistr(prob.ca, "beta", start = list(shape1 = 1, shape2 = 1),lower=c(0,0)),
             silent = TRUE)
         # now try to generate 5000 random numbers with the parameters of fitdistr
         try(beta2 <- rbeta(5000, beta1$estimate[1], beta1$estimate[2]), silent = TRUE)
-        try(ed <- ecdf(beta2), silent = TRUE)
-        # try to calculate the lower 5% quantile
+        if(!is.null(beta2)){ed <- ecdf(beta2)}
+        # write to list
         res.ecdf[[i2]] <- list(rf$classes[i2], ed)
     }
 

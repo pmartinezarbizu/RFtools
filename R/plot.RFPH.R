@@ -23,31 +23,18 @@
 #'@author Pedro Martinez Arbizu & Sven Rossel
 #'
 #'@examples
-#' data(iris)
-#' library(randomForest)
-#' irSe <- iris[iris$Species == 'setosa',]
-#' ir <- iris[iris$Species != 'setosa',]
-#' ir$Species <- factor(ir$Species)
-#' irNc <- add.null.class(ir$Species,ir[,1:4])
-#' rf <- randomForest(class ~ ., data = irNc)
-#' posth <- rf.post.hoc(rf,irSe)
-#'
-#' plot(posth)
-#' plot(posth,'versicolor',0.001)
-#'
-#' #example with maldi data
+#'#example with maldi data
 #' data(maldi)
 #' library(randomForest)
 #' unique(maldi$species)
-#' maldi_train <- maldi[maldi$species != 'Tachidius discipes',]
-#' maldi_test <- maldi[maldi$species == 'Tachidius discipes',]
-#' #exclude Tachidius discipes from factors
+#' maldi_train <- maldi[maldi$species != 'Cletodes limicola',]
+#' maldi_test <- maldi[maldi$species == 'Cletodes limicola',]
+#'#exclude Cletodes limicola from factors
 #' maldi_train$species <- factor(maldi_train$species)
 #' rf <- randomForest(species ~ ., data = maldi_train[-1])
-#' test <- rf.post.hoc(rf,maldi_test)
-#' plot(test)
-#' plot(test,'Cletodes limicola')
-#'
+#' ph <- rf.post.hoc(rf,maldi_test)
+#' plot(ph)
+#' plot(ph,'Tachidius discipes')
 #'@import stats graphics
 #'@export plot.RFPH
 #'
@@ -62,16 +49,16 @@ plot.RFPH <- function(x, Species = "all", q = 0.05) {
         df <- x$ecdf[[Species]][[2]]
         qv <- quantile(df, q)
         sub_dat <- x$post.hoc[x$post.hoc$winner == Species, ]
-        col_sig <- ifelse(sub_dat$p.assign >= qv, "red4", "white")
+        col_sig <- ifelse(sub_dat$POA >= qv, "red4", "white")
         prob <- runif(1000, 1e-04, 1)
         vy <- quantile(df, prob)
         plot(density(vy), xlim = c(0, 1), lwd = 2, main = Species)
         abline(v = qv, col = "grey", lty = 2)
-        points(sub_dat$p.assign, rep(0, nrow(sub_dat)), pch = 21, bg = col_sig, cex = 2)
+        points(sub_dat$POA, rep(0, nrow(sub_dat)), pch = 21, bg = col_sig, cex = 2)
 
     } else if (Species == "all") {
         c1 <- unique(x$post.hoc$winner)
-        min_POA <- floor(min(x$post.hoc$p.assign) * 100)/100
+        min_POA <- floor(min(x$post.hoc$POA) * 100)/100
         plot(1:length(c1), 1:length(c1), xlim = c(min_POA - 0.5, 1.2), ylim = c(0,
             length(c1) + 1.5), yaxt = "n", xaxt = "n", bty = "n", xlab = "", ylab = "",
             type = "n")
@@ -81,7 +68,7 @@ plot.RFPH <- function(x, Species = "all", q = 0.05) {
             sub_dat <- x$post.hoc[x$post.hoc$winner == class, ]
             df <- x$ecdf[[as.character(class)]][[2]]
             qv <- quantile(df, q)
-            col_sig <- ifelse(sub_dat$p.assign >= qv, "red4", "white")
+            col_sig <- ifelse(sub_dat$POA >= qv, "red4", "white")
             prob <- runif(1000, 1e-04, 1)
             vy <- quantile(df, prob)
             median <- median(vy)
@@ -89,14 +76,14 @@ plot.RFPH <- function(x, Species = "all", q = 0.05) {
             q95 <- quantile(vy, 1 - q)
             arrows(q05, n_spec, q95, n_spec, lwd = 2, code = 3, angle = 90, length = 0.05)
             points(median, n_spec, pch = 23, cex = 2, bg = "grey")
-            points(sub_dat$p.assign, rep(n_spec, nrow(sub_dat)), pch = 21, bg = col_sig,
+            points(sub_dat$POA, rep(n_spec, nrow(sub_dat)), pch = 21, bg = col_sig,
                 cex = 1.5)
             text(min_POA - 0.5, n_spec, labels = class, pos = 4, font = 3)
         }
 
         # make some lables and beauty
-        abline(h = length(c1) + 1.5, lwd = 1.5)
-        abline(h = 0.5, lwd = 1.5)
+        abline(h = length(c1) + .6, lwd = 1.5)
+        abline(h = 0.4, lwd = 1.5)
         axis(1, at = c(min_POA, min_POA + ((1 - min_POA)/2), 1), labels = c(min_POA,
             min_POA + ((1 - min_POA)/2), "1"), lwd.ticks = 1)
     } else (stop(paste(Species,'is not a valid class')))

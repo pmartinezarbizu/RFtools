@@ -30,31 +30,18 @@ If Species = 'all' (default), then all classes are plotted. Instead of density f
 and the range between quantiles q and 1-q are plotted.
 }
 \examples{
-data(iris)
-library(randomForest)
-irSe <- iris[iris$Species == 'setosa',]
-ir <- iris[iris$Species != 'setosa',]
-ir$Species <- factor(ir$Species)
-irNc <- add.null.class(ir$Species,ir[,1:4])
-rf <- randomForest(class ~ ., data = irNc)
-posth <- rf.post.hoc(rf,irSe)
-
-plot(posth)
-plot(posth,'versicolor',0.001)
-
 #example with maldi data
 data(maldi)
 library(randomForest)
 unique(maldi$species)
-maldi_train <- maldi[maldi$species != 'Tachidius discipes',]
-maldi_test <- maldi[maldi$species == 'Tachidius discipes',]
-#exclude Tachidius discipes from factors
+maldi_train <- maldi[maldi$species != 'Cletodes limicola',]
+maldi_test <- maldi[maldi$species == 'Cletodes limicola',]
+#exclude Cletodes limicola from factors
 maldi_train$species <- factor(maldi_train$species)
 rf <- randomForest(species ~ ., data = maldi_train[-1])
-test <- rf.post.hoc(rf,maldi_test)
-plot(test)
-plot(test,'Cletodes limicola')
-
+ph <- rf.post.hoc(rf,maldi_test)
+plot(ph)
+plot(ph,'Tachidius discipes')
 }
 \seealso{
 \code{\link{rf.post.hoc}}
