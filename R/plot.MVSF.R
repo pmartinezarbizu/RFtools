@@ -55,7 +55,7 @@ plot.MVSF <- function(x, pnull = 0.05, psmooth = 0.05) {
             cex = 1)
     }
 
-    # make some lables and beauty
+    # make some labels and beauty
     abline(h = nrow(x) + 0.5, lwd = 1.5)
     abline(h = 0.5, lwd = 1.5)
 
