@@ -10,3 +10,4 @@ In your R session
 ```install_github("pmartinezarbizu/RFtools")```
 
 That's it
+
