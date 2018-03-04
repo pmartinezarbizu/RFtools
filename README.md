@@ -10,4 +10,5 @@ In your R session
 ```install_github("pmartinezarbizu/RFtools")```
 
 That's it
+
 [![DOI](https://zenodo.org/badge/110375495.svg)](https://zenodo.org/badge/latestdoi/110375495)
