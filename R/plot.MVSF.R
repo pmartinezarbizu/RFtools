@@ -45,8 +45,8 @@ plot.MVSF <- function(x, pnull = 0.05, psmooth = 0.05) {
     # add confidence intervals
     cd = nrow(x):1
     for (i in 1:nrow(x)) {
-        arrows(x$q05.null[cd[i]], nrow(x) - (i - 1), x$q95.null[cd[i]], nrow(x) -
-            (i - 1), lwd = 1.5, code = 3, angle = 90, length = 0.04)
+        arrows(x$q05.null[cd[i]], i, x$q95.null[cd[i]], i,
+		lwd = 1.5, code = 3, angle = 90, length = 0.04)
     }
 
     # add species names
