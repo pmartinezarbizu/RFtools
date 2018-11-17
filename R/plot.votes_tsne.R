@@ -53,13 +53,7 @@ plot.votes_tsne <- function(x, cex=1.5,
 							y.low=3,
 							pal=colors) {
  
- #initial checks
-    if (class(x)[1] != 'votes_tsne') {
-        stop('x should be an object produced by votes.tsne\n ')
-    }
-
- 
-	# define some colors	
+ 	# define some colors	
 	colors <- c(
 	'lightblue' =rgb(102,203,254,maxColorValue=255,alpha=alpha),
 	'pink' =rgb(254,102,254,maxColorValue=255,alpha=alpha),

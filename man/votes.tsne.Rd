@@ -36,7 +36,8 @@ A plot method is available
 data(iris)
 rf <- randomForest(Species ~.,data = iris)
 vt <- votes.tsne(rf)
-plot(vt)
+
+plot(vt,margin=1,y.low=5)
 
 }
 \seealso{

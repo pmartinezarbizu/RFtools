@@ -33,7 +33,8 @@
 #' data(iris)
 #' rf <- randomForest(Species ~.,data = iris)
 #' vt <- votes.tsne(rf)
-#' plot(vt)
+#' 
+#' plot(vt,margin=1,y.low=5)
 #'
 #'@export votes.tsne
 #'@seealso \code{\link{plot.votes_tsne}} 
@@ -105,7 +106,6 @@ votes.tsne <- function(x, method = 'none', perplex.factor = 0.15, max_iter=1000)
 	res <- list(points=tsne,predicted=x$predicted,match=coltable)
 	class(res) <- c("votes_tsne", "list")
     return(res)
-
 }
 
 
