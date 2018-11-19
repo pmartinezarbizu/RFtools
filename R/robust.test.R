@@ -27,6 +27,14 @@
 #'
 #'@author Pedro Martinez Arbizu
 #'
+#'@references 
+#' Rossel, S. & P. Martinez Arbizu (2018) Automatic specimen identification of Harpacticoids (Crustacea:Copepoda) using Random Forest
+#' and MALDI‐TOF mass spectra, including a post hoc test for false positive discovery. Methods in Ecology and Evolution,
+#' 9(6):1421-1434.
+#' 
+#'\url{https://doi.org/10.1111/2041-210X.13000}
+#'
+#'
 #'@examples
 #' data(iris)
 #' rbt.iris <- robust.test(iris$Species,iris[,1:4])

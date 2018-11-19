@@ -36,6 +36,13 @@
 #'
 #'@author Pedro Martinez Arbizu & Sven Rossel
 #'
+#'@references 
+#' Rossel, S. & P. Martinez Arbizu (2018) Automatic specimen identification of Harpacticoids (Crustacea:Copepoda) using Random Forest
+#' and MALDI‐TOF mass spectra, including a post hoc test for false positive discovery. Methods in Ecology and Evolution,
+#' 9(6):1421-1434.
+#' 
+#'\url{https://doi.org/10.1111/2041-210X.13000}
+#'
 #'@examples
 #'#example with maldi data
 #' data(maldi)
@@ -64,7 +71,7 @@ rf.post.hoc <- function(rf, newdata) {
     # predict with rf model
     res.pred <- data.frame(class = predict(rf, newdata), predict(rf, newdata, type = "p"))
 
-    # probability of assignment
+    # winner probability of assignment
     prob.assign <- apply(res.pred[-1], max, MARGIN = 1)
 
     # consider only predicted classes
@@ -85,6 +92,11 @@ rf.post.hoc <- function(rf, newdata) {
     for (i2 in unique(pred.class.votes$class)) {
         # list of probabilities of correct assigment for class i
         prob.ca <- pred.class.votes[pred.class.votes == i2, i2]
+		
+		# laplace correction
+		prob.ca[prob.ca == 0] <- 1e-3
+		prob.ca[prob.ca == 1] <- 1-(1e-9)
+
         # first calculate lower 5% quantile from ecdf
         ed <- ecdf(prob.ca)
         # delete beta values

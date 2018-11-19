@@ -56,6 +56,13 @@ ph <- rf.post.hoc(rf,maldi_test)
 plot(ph)
 plot(ph,'Tachidius discipes')
 }
+\references{
+Rossel, S. & P. Martinez Arbizu (2018) Automatic specimen identification of Harpacticoids (Crustacea:Copepoda) using Random Forest
+and MALDI‐TOF mass spectra, including a post hoc test for false positive discovery. Methods in Ecology and Evolution,
+9(6):1421-1434.
+
+\url{https://doi.org/10.1111/2041-210X.13000}
+}
 \seealso{
 \code{\link{add.null.class}} \code{\link{smooth.data}} \code{\link{robust.test}} \code{\link{plot.RFPH}}
 }
