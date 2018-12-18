@@ -11,7 +11,7 @@ add.null.class(target, predictors, nMC = 50)
 
 \item{predictors}{The columns containig the predictor variables.}
 
-\item{nMC}{Number returned observations of the null class (default = 50)}
+\item{nMC}{Number returned observations of the null class (default = 50).}
 }
 \value{
 Dataframe with original observatios and nMC observations of a null class.

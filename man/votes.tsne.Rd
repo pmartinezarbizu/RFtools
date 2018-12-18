@@ -4,7 +4,8 @@
 \alias{votes.tsne}
 \title{Votes t-sne}
 \usage{
-votes.tsne(x, method = "none", perplex.factor = 0.15, max_iter = 1000)
+votes.tsne(x, method = "none", perplex.factor = 0.15,
+  max_iter = 1000)
 }
 \arguments{
 \item{x}{A randomForest object}
