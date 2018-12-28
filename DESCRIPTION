@@ -15,5 +15,5 @@ Depends: R (>= 3.0.0)
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Imports: randomForest, foreach, doParallel, MASS 
+Imports: randomForest, foreach, doParallel, MASS, tsne 
 RoxygenNote: 6.1.1
