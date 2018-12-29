@@ -43,7 +43,7 @@
 votes.tsne <- function(x, method = 'none', perplex.factor = 0.15, max_iter=1000)
 {
 	#initial checks
-    if (class(x)[1] != 'randomForest.formula') {
+	if(!(inherits(x,'randomForest'))) {
         stop('x should be a randomForest Object\n ')
     }
 

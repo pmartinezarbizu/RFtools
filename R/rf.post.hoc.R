@@ -65,7 +65,7 @@
 rf.post.hoc <- function(rf, newdata) {
 
     # initial checks
-    if (class(rf)[1] != "randomForest.formula") {
+    if(!(inherits(rf,'randomForest'))) {
         stop("rf should be a randomForest Object\n ")
     }
     # predict with rf model
