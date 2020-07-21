@@ -88,10 +88,10 @@ rf.post.hoc <- function(rf, newdata) {
     pred.class <- pred.class.votes[pred.class.votes$class == winner,]
 
     # for each species calculate the empirical beta distribution
-    res.ecdf <- vector("list", length(unique(pred.class.votes$class)))
+    res.ecdf <- vector("list", length(unique(pred.class$class)))
     for (i2 in unique(pred.class.votes$class)) {
         # list of probabilities of correct assigment for class i
-        prob.ca <- pred.class.votes[pred.class.votes == i2, i2]
+        prob.ca <- pred.class[pred.class$class == as.character(i2), as.character(i2)]
 		
 		# laplace correction
 		prob.ca[prob.ca == 0] <- 1e-3
