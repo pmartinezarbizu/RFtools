@@ -1,7 +1,7 @@
 Package: RFtools
 Title: Miscellaneous Tools For Random Forest Models
-Version: 0.0.1
-Date: 2017-10-01
+Version: 0.0.3
+Date: 2020-08-04
 Authors@R: c(
     person("Pedro", "Martínez Arbizu", email = "pmartinez@senckenberg.de", role = c("aut", "cre")),
     person("Sven", "Rossel", email = "srossel@senckenberg.de", role = "aut")
