@@ -91,8 +91,8 @@ MVSF.test <- function(target, predictors, nMC = 999) {
     # calculate Pseudo value P > obs
     p.par <- c()  # probability that the null model error rate is greater than the observed error rate 
     for (i in 1:length(unique(target))) {
-        p.par <- c(p.par, length(rf.par[i, ] >= rf$confusion[, length(unique(target)) + 
-            1][i])/(nMC + 1))
+        p.par <- c(p.par, length(which(rf.par[i, ] >= rf$confusion[, length(unique(target)) + 
+            1][i]))/(nMC + 1))
     }
     
     # Flexibility test create nMC smooth observations per class
