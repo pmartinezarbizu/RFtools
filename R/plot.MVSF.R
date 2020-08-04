@@ -42,7 +42,7 @@ plot.MVSF <- function(x, pnull = 0.05, psmooth = 0.05) {
 
     # colors, black is significant
     col.p.sim <- ifelse(x$p.smooth < psmooth, "black", "white")
-    col.p.par <- ifelse(x$P.null > pnull, "black", "white")
+    col.p.par <- ifelse(x$P.null < pnull, "black", "white")
 
     plot(x$oob.err, seq(nrow(x), 1, -1), pch = 2, xlim = c(-1.5, 1.2), ylim = c(0,
         nrow(x) + 1.5), yaxt = "n", xaxt = "n", bty = "n", xlab = "", ylab = "",
