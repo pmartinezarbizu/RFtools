@@ -16,4 +16,4 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Imports: randomForest, foreach, doParallel, MASS, tsne 
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1

@@ -4,7 +4,9 @@
 \name{maldi}
 \alias{maldi}
 \title{Example data maldi.RData for RFtools}
-\format{A data frame with 176 rows (specimens), 543 variables(protein masses) and a grouping factor (species)}
+\format{
+A data frame with 176 rows (specimens), 543 variables(protein masses) and a grouping factor (species)
+}
 \usage{
 data(maldi)
 }

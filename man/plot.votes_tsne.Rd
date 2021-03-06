@@ -4,11 +4,19 @@
 \alias{plot.votes_tsne}
 \title{Plot votes_tsne}
 \usage{
-\method{plot}{votes_tsne}(x, cex = 1.5,
+\method{plot}{votes_tsne}(
+  x,
+  cex = 1.5,
   pch = coltable$symbol[match(x$predicted, coltable$class)],
-  bg = coltable$color[match(x$predicted, coltable$class)], main = "",
-  alpha = 220, margin = 7, ncol = 4, x.intersp = 1, y.low = 3,
-  pal = colors)
+  bg = coltable$color[match(x$predicted, coltable$class)],
+  main = "",
+  alpha = 220,
+  margin = 7,
+  ncol = 4,
+  x.intersp = 1,
+  y.low = 3,
+  pal = colors
+)
 }
 \arguments{
 \item{x}{A votes_tsne object}
