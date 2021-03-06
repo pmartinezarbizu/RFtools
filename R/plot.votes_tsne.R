@@ -40,6 +40,7 @@
 #' plot(vt,margin=5,y.low=3,ncol=3,cex=2,alpha=180,main='rf votes on Maldi-Tof spectra')
 #'
 #'@export plot.votes_tsne
+#'@exportS3Method plot votes_tsne
 #'@seealso \code{\link{votes.tsne}} 
 
 plot.votes_tsne <- function(x, cex=1.5, 

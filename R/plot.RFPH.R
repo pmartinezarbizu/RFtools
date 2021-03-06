@@ -45,6 +45,7 @@
 #' plot(ph,'Tachidius discipes')
 #'@import stats graphics
 #'@export plot.RFPH
+#'@exportS3Method plot RFPH
 #'
 #'@seealso \code{\link{rf.post.hoc}}
 

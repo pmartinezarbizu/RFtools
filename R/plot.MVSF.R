@@ -34,6 +34,7 @@
 #' print(MVSF.iris)
 #' plot(MVSF.iris)
 #'@export plot.MVSF
+#'@exportS3Method plot MVSF
 
 
 
